@@ -6,7 +6,6 @@
   Author: Pixinvent
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
-
 const path = require('path');
 module.exports = {
   publicPath: process.env.NODE_ENV === 'production'

@@ -21,7 +21,7 @@ Vue.use(Vuesax)
 
 // VeeValidate
 import VeeValidate, { Validator } from 'vee-validate'
-import es from './vee-locale/es_custom'
+import es from './vee-locale/es_custom.js'
 Vue.use(VeeValidate);
 Validator.localize('es', es);
 
@@ -83,6 +83,10 @@ Vue.mixin(alerts);
 // Vue select css
 // Note: In latest version you have to add it separately
 // import 'vue-select/dist/vue-select.css';
+
+
+Vue.config.productionTip = false;
+Vue.prototype.$isLoading = false;
 
 import {mapState, mapMutations, mapActions} from "vuex";
 
