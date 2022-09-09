@@ -84,10 +84,6 @@ Vue.mixin(alerts);
 // Note: In latest version you have to add it separately
 // import 'vue-select/dist/vue-select.css';
 
-
-Vue.config.productionTip = false;
-Vue.prototype.$isLoading = false;
-
 import {mapState, mapMutations, mapActions} from "vuex";
 
 import interceptors from "./helpers/interceptors.js";

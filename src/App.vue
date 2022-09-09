@@ -23,7 +23,7 @@
 </template>
 
 <script>
-import themeConfig from '@/../themeConfig.js'
+import themeConfig from '../themeConfig'
 // Vuex Store
 import store from './store/store'
 import OrderDetail from "./views/components/popUps/OrderDetail.vue"

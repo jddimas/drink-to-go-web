@@ -10,10 +10,6 @@
 const path = require('path');
 module.exports = {
   publicPath: '/',
-  transpileDependencies: [
-    'vue-echarts',
-    'resize-detector'
-  ],
   configureWebpack: {
     resolve: {
       alias: {
