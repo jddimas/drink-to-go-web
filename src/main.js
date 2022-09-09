@@ -113,7 +113,7 @@ Vue.mixin({
   },
   computed: {
     ApiRoute() {
-      return process.env.VUE_APP_API_DOMAIN
+      return "http://auxiliar96-001-site1.gtempurl.com"
     },
   },
   watch: {
