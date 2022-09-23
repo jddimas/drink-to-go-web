@@ -96,7 +96,7 @@ interceptors();
 // SignalR - Socket para nuevos pedidos.
 import VueSignalR from '@latelier/vue-signalr'
 
-Vue.use(VueSignalR, `http://auxiliar96-001-site1.gtempurl.com/DrinkGoHub`)
+Vue.use(VueSignalR, `https://api.drinkandgo.net/DrinkGoHub`)
 
 Vue.mixin({
   data: function() {
@@ -113,7 +113,7 @@ Vue.mixin({
   },
   computed: {
     ApiRoute() {
-      return "http://auxiliar96-001-site1.gtempurl.com"
+      return "https://api.drinkandgo.net"
     },
   },
   watch: {

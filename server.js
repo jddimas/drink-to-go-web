@@ -8,7 +8,7 @@ const app = express();
 
 app.use('/', serverStatic(path.join(__dirname, '/dist')));
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8081;
 
 app.listen(port);
 

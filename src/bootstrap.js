@@ -23,7 +23,7 @@ try {
 window.axios = require('axios');
 window.axios.defaults.headers.common['Content-Type'] = 'application/json';
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-window.axios.defaults.baseURL = "http://auxiliar96-001-site1.gtempurl.com";
+window.axios.defaults.baseURL = "https://api.drinkandgo.net";
 if(process.env.VUE_APP_ENV == 'production') {
     window.axios.defaults.withCredentials = true;
     //window.axios.defaults.headers.common['cache-control'] = "public, max-age=300000000";

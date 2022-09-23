@@ -46,11 +46,25 @@
         </vs-sidebar>
 
         <vs-popup :active.sync="orderDetailPrompt" title="Detalle de la orden">
-            <order-detail :order="currentOrder"></order-detail>
-            <div id="actions-new-order" class="flex mt-4 float-right">
-                <vs-button @click.stop="updateOrderStatus(currentOrder.idPedido, 2)" type="line" color="grey"
-                    class="mr-4">Rechazar</vs-button>
+            <order-detail v-if="!isRejected" :order="currentOrder"></order-detail>
+            <div v-if="!isRejected" id="actions-new-order" class="flex mt-4 float-right">
+                <vs-button @click.stop="isRejected = true" type="line" color="grey" class="mr-4">Rechazar</vs-button>
                 <vs-button @click.stop="updateOrderStatus(currentOrder.idPedido, 4)">Aceptar pedido</vs-button>
+            </div>
+
+            <div v-if="isRejected">
+                <p>Explicanos el motivo del rechazo:</p>
+                <vs-textarea
+                    v-model.lazy="rejectionQuote"
+                    placeholder="ej. No tenemos disponible el producto."
+                    name="description"
+                    :danger="hasError('description')"
+                    :danger-text="getErrorText('description')"
+                    :success="isSuccessful('description')"
+                />
+                <div class="flex mt-4 float-right">
+                    <vs-button :disabled="rejectionQuote === null" @click.stop="updateOrderStatus(currentOrder.idPedido, 2)" type="line" color="grey" class="mr-4">Rechazar</vs-button>
+                </div>
             </div>
         </vs-popup>
     </div>
@@ -92,6 +106,8 @@ export default {
             orders: [],
             orderDetailPrompt: false,
             currentOrder: null,
+            isRejected: false,
+            rejectionQuote: null
         }
     },
     mixins: [
@@ -110,6 +126,7 @@ export default {
         }
     },
     created() {
+        this.errors.clear();
         this.getNewOrders();
         setInterval(() => {
             this.getNewOrders();
@@ -176,6 +193,19 @@ export default {
         }
     },
     methods: {
+        hasError(f) {
+            return this.errors.has(f);
+        },
+        getErrorText(control) {
+            return this.errors.first(control);
+        },
+        errorText(f) {
+            return this.errors.first(f);
+        },
+        isSuccessful(control) {
+            const field = this.fields[control];
+            return (field && field.required && field.valid && !this.hasError(control));
+        },
         async getOrderDetail(orderId) {
             try {
                 this.showLoading(true);
@@ -196,12 +226,18 @@ export default {
         async updateOrderStatus(orderId, newStatus) {
             try {
                 this.showLoading(true);
-                const payoad = {
+                let payoad = {
                     "idOrder": orderId,
                     "idStatus": newStatus
                 }
+
+                if(this.isRejected){
+                    payoad.motivoRechazo = this.rejectionQuote
+                }
+
                 await axios.post(`/api/NegPedido/updateStatusOrder`, payoad);
                 this.orderDetailPrompt = false;
+                this.isRejected = false;
                 this.getNewOrders();
                 this.showLoading(false);
             } catch (error) {
