@@ -49,7 +49,7 @@
             <order-detail v-if="!isRejected" :order="currentOrder"></order-detail>
             <div v-if="!isRejected" id="actions-new-order" class="flex mt-4 float-right">
                 <vs-button @click.stop="isRejected = true" type="line" color="grey" class="mr-4">Rechazar</vs-button>
-                <vs-button @click.stop="updateOrderStatus(currentOrder.idPedido, 4)">Aceptar pedido</vs-button>
+                <vs-button @click.stop="__updateOrderStatus(currentOrder.idPedido, 4)">Aceptar pedido</vs-button>
             </div>
 
             <div v-if="isRejected">
@@ -63,7 +63,7 @@
                     :success="isSuccessful('description')"
                 />
                 <div class="flex mt-4 float-right">
-                    <vs-button :disabled="rejectionQuote === null" @click.stop="updateOrderStatus(currentOrder.idPedido, 2)" type="line" color="grey" class="mr-4">Rechazar</vs-button>
+                    <vs-button :disabled="rejectionQuote === null" @click.stop="__updateOrderStatus(currentOrder.idPedido, 2)" type="line" color="grey" class="mr-4">Rechazar</vs-button>
                 </div>
             </div>
         </vs-popup>
@@ -76,6 +76,7 @@ import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import dateHelper from '../../../components/mixins/dateHelper'
 import formatHelper from '../../../components/mixins/formatHelper'
 import OrderDetail from '../../../views/components/popUps/OrderDetail.vue'
+import store from '../../../store/store';
 
 export default {
     props: {
@@ -125,12 +126,22 @@ export default {
             }
         }
     },
-    created() {
+    async created() {
         this.errors.clear();
         this.getNewOrders();
         setInterval(() => {
             this.getNewOrders();
         }, 500000);
+
+        await this.$socket.start({
+            log: true // Logging is optional but very helpful during development
+        });
+        const user = store.getters["auth/getUser"];
+        if(user){
+            await axios.put(`/api/AdnUsuario/SocketConnection/${this.$socket.socket.connectionId}`);
+        }
+        sessionStorage.setItem('connectionId', this.$socket.socket.connectionId);
+        // console.log(this.$socket);
     },
     computed: {
         footerTypeLocal: {
@@ -192,6 +203,13 @@ export default {
             return this.$store.state.windowWidth
         }
     },
+    sockets: {
+        UpdateOrderStatus (orderId) {
+            if(orderId[1] == 1){
+                this.getOrderDetail(orderId[0]);
+            }
+        }
+    },
     methods: {
         hasError(f) {
             return this.errors.has(f);
@@ -223,7 +241,7 @@ export default {
                 console.error(error);
             }
         },
-        async updateOrderStatus(orderId, newStatus) {
+        async __updateOrderStatus(orderId, newStatus) {
             try {
                 this.showLoading(true);
                 let payoad = {

@@ -150,27 +150,27 @@ export default {
     window.addEventListener('resize', this.handleWindowResize)
     window.addEventListener('scroll', this.handleScroll)
 
-    await this.$socket.start({
-      log: true // Logging is optional but very helpful during development
-    });
-    const user = store.getters["auth/getUser"];
-    if(user){
-      await axios.put(`/api/AdnUsuario/SocketConnection/${this.$socket.socket.connectionId}`);
-    }
-    sessionStorage.setItem('connectionId', this.$socket.socket.connectionId);
+    // await this.$socket.start({
+    //   log: true // Logging is optional but very helpful during development
+    // });
+    // const user = store.getters["auth/getUser"];
+    // if(user){
+    //   await axios.put(`/api/AdnUsuario/SocketConnection/${this.$socket.socket.connectionId}`);
+    // }
+    // sessionStorage.setItem('connectionId', this.$socket.socket.connectionId);
     // console.log(this.$socket);
   },
   destroyed () {
     window.removeEventListener('resize', this.handleWindowResize)
     window.removeEventListener('scroll', this.handleScroll)
-  },
-  sockets: {
-    UpdateOrderStatus (orderId, orderStatus) {
-      if(orderStatus == 1){
-        this.getOrderDetail(orderId);
-      }
-    }
   }
+  // sockets: {
+  //   UpdateOrderStatus (orderId, orderStatus) {
+  //     if(orderStatus == 1){
+  //       this.getOrderDetail(orderId);
+  //     }
+  //   }
+  // }
 }
 
 </script>

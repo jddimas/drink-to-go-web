@@ -53,9 +53,14 @@
                                     <vs-chip :color="translateStatus(tr.estatus).color">{{ translateStatus(tr.estatus).name }}</vs-chip>
                                 </vs-td>
                                 <vs-td>
-                                    <vs-button @click="openOrderDetauk(tr)" type="line">
-                                        Ver detalle
-                                    </vs-button>
+                                    <div class="flex">
+                                        <vs-button @click="openOrderDetauk(tr)" type="line">
+                                            Ver detalle
+                                        </vs-button>
+                                        <vs-button v-if="tr.estatus == 4 || tr.estatus == 5" @click="requestUpdateOrderProduct(tr, tr.estatus+1)" size="small" class="ml-3" :color="translateStatus(tr.estatus+1).color">
+                                            {{getActionText(tr.estatus+1).name}}
+                                        </vs-button>
+                                    </div>
                                 </vs-td>
                             </vs-tr>
                         </template>
@@ -100,6 +105,7 @@ export default {
             , orders: []
             , orderDetailPrompt: false
             , currentOrder: null
+            , newStatus: null
         }
     },
     mounted() {
@@ -147,7 +153,7 @@ export default {
             switch(status){
                 case 4: 
                     color = "dark";
-                    name = "Aceptados";
+                    name = "Aceptado";
                 break;
                 case 5: 
                     color = "warning";
@@ -155,17 +161,63 @@ export default {
                 break;
                 case 6: 
                     color = "success";
-                    name = "Entregados";
+                    name = "Entregado";
                 break;
                 case 3: 
                     color = "primary";
-                    name = "Cancelados";
+                    name = "Cancelado";
                 break;
             }
             return {
                 color: color, name: name
             };
-        }
+        },
+        getActionText(status){
+            let name = "NA";
+            switch(status){
+                case 4: 
+                    name = "Aceptados";
+                break;
+                case 5: 
+                    name = "En camino";
+                break;
+                case 6: 
+                    name = "Entregado";
+                break;
+            }
+            return {
+                name: name
+            };
+        },
+        async requestUpdateOrderProduct(order, newStatus) {
+            this.currentOrder = order;
+            this.newStatus = newStatus;
+            this.$vs.dialog({
+                type: 'confirm',
+                color: 'warning',
+                title: "Actualizar pedido",
+                text: `¿Estás seguro de actualizar este pedido: #${this.currentOrder.idPedido}?`,
+                acceptText: "Aceptar",
+                cancelText: 'Cancelar',
+                accept: this.doUpdateOrderStatus
+            });
+        }, 
+        async doUpdateOrderStatus() {
+            try {
+                this.showLoading(true);
+                let payload = {
+                    "idOrder": this.currentOrder.idPedido,
+                    "idStatus": this.newStatus
+                }
+                await axios.post(`/api/NegPedido/updateStatusOrder`, payload);
+                this.getOrdersByStatus(this.newStatus);
+                this.newStatus = null;
+                this.currentOrder = null;
+                this.showLoading(false);
+            } catch (error) {
+                console.error(error);
+            }
+        },
     }
 }
 </script>
