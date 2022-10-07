@@ -52,7 +52,7 @@
                 <vs-input
                     v-validate="ruleRequired"
                     v-model.number="currentProduct.inventario"
-                    placeholder="Escribe la disponibilidad del producto. Ej, 1"
+                    :placeholder="currentProduct.inventario == null ? 'Escribe la disponibilidad del producto. Ej, 1' : ''"
                     class="w-full"
                     type="number"
                     name="stock"
@@ -77,7 +77,7 @@
                 <div class="centerx ml-6">
                     <vs-upload 
                         ref="vsupload"
-                        :show-upload-button="true" 
+                        :show-upload-button="false" 
                         :multiple="false" 
                         limit="1"
                         :fileName="currentProduct.nombre + '_logo'"

@@ -4,6 +4,7 @@
             <div class="vx-col w-full mb-4">
                 <p><strong>Pedido: <span class="dg-title"># {{order.idPedido}}</span></strong></p>
                 <p><strong>Estatus: </strong><span color="warning">{{order.estatus}}</span></p>
+                <p v-if="order.estatus == 'Rechazado'"><strong>Motivo de Rechazo: </strong><span color="warning">{{order.motivoRechazo}}</span></p>
                 <p><strong>Nombre: </strong><span color="warning">{{order.nombreCliente}}</span></p>
                 <p><strong>Fecha y hora del pedido: </strong><span color="warning">{{explicitDateFormat(order.fechaPedido)}}</span></p>
                 <p><strong>Dirección: </strong><span color="warning">{{order.direccion}}</span></p>
