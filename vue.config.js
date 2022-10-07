@@ -6,6 +6,11 @@
   Author: Pixinvent
   Author URL: http://www.themeforest.net/user/pixinvent
 ==========================================================================================*/
+// Do NOT use the HtmlWebpackPlugin name to avoid a collision with standard Vue usage of the html-webpack-plugin
+// NOTE also this uses the vue-cli-service dependency path for html-webpack-plugin
+// Beware if the require() path is incorrect, it may fail silently, thus ignoring vue.config.js (per (per https://github.com/vuejs/vue-cli/issues/5442)
+const HtmlWebpackPlugin2 = require('@vue/cli-service/node_modules/html-webpack-plugin');
+
 const path = require('path');
 module.exports = {
   publicPath: './',
