@@ -36,7 +36,7 @@
                         <router-link :to="{name:'passwordRecovery'}">Recuperar contraseña</router-link>
                     </div>
                     <div>
-                        <vs-button :disabled="isDisabled" @click.stop="login()" class="w-full">Iniciar sesión</vs-button>
+                        <vs-button :disabled="isDisabled" v-on:keyup.enter="login()" @click.stop="login()" class="w-full">Iniciar sesión</vs-button>
                     </div>
                 </div>
             </section>

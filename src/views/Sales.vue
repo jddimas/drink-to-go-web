@@ -100,6 +100,7 @@ import DateRangePicker from 'vue2-daterange-picker'
 import 'vue2-daterange-picker/dist/vue2-daterange-picker.css'
 import dateHelper from '../components/mixins/dateHelper';
 import currencyHelper from '../components/mixins/currencyHelper';
+import * as moment from "moment";
 
 const topProducts = [
     { producto: "CocaCola", noVentas: 1 },
@@ -131,7 +132,7 @@ export default {
         return {
             es: es,
             dateRange: {
-                startDate: new Date(),
+                startDate: moment().subtract(1, "months").toDate(),
                 endDate: new Date()
             },
             locale: {
@@ -154,15 +155,15 @@ export default {
             isMounted: false
         }
     },
-    mounted() {
-        this.getDashboard();
-        this.isMounted = true;
+    async mounted() {
+        await this.getDashboard();
     },
     methods: {
         async getDashboard() {
             try {
                 if(this.dateRange !== null && (this.dateRange.startDate !== null || this.dateRange.endDate !== null)){
                     this.showLoading(true);
+                    console.log(moment().subtract(1, "months").toDate())
                     this.isMounted = false;
                     const response = await axios.get(`/api/NegPedido/salesInfo/${this.urlFormat(this.dateRange.startDate)}/${this.urlFormat(this.dateRange.endDate)}`);
                     const response2 = await axios.get(`/api/NegPedido/salesByProductInfo/${this.urlFormat(this.dateRange.startDate)}/${this.urlFormat(this.dateRange.endDate)}`);
@@ -180,8 +181,6 @@ export default {
                     } else {
                         this.failedOperationNotif("Ha ocurrido un error.");
                     }
-
-
                     this.isMounted = true;
                     this.showLoading(false);
                 } else {

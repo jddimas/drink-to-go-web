@@ -16,7 +16,7 @@
                     <vs-button @click.stop="getOrdersByStatus(6)" type="border" color="success" size="large">Entregados</vs-button>
                 </div>
                 <div class="vx-col sm:w-1/2 md:w-1/4">
-                    <vs-button @click.stop="getOrdersByStatus(3)" type="border" color="primary" size="large">Cancelados</vs-button>
+                    <vs-button @click.stop="getOrdersByStatus(2)" type="border" color="primary" size="large">Rechazados</vs-button>
                 </div>
             </div>
         </section>
@@ -163,9 +163,9 @@ export default {
                     color = "success";
                     name = "Entregado";
                 break;
-                case 3: 
+                case 2: 
                     color = "primary";
-                    name = "Cancelado";
+                    name = "Rechazados";
                 break;
             }
             return {
