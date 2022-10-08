@@ -17,7 +17,7 @@
                                 icon="icon icon-hash"
                                 icon-pack="feather"
                                 label-placeholder=""
-                                autocomplete="null"
+                                autocomplete="off"
                                 v-model="inputCode"
                                 class="w-full mb-2"/>
 
@@ -29,7 +29,7 @@
                                 icon="icon icon-lock"
                                 icon-pack="feather"
                                 label-placeholder=""
-                                autocomplete="null"
+                                autocomplete="off"
                                 v-model="password"
                                 class="w-full" />
 
@@ -41,7 +41,7 @@
                                 icon="icon icon-lock"
                                 icon-pack="feather"
                                 label-placeholder=""
-                                autocomplete="null"
+                                autocomplete="off"
                                 v-model="password_second"
                                 class="w-full" />
 
@@ -108,9 +108,15 @@ export default {
                     return;
                 }
 
-                const res = await axios.put(`/api/AdnUsuario/updatePasswordAdmin/${this.email}/${this.password}/${this.inputCode}`);
+                const res = await axios.post(`/api/AdnUsuario/updatePasswordAdmin`,
+                {
+                    email: this.email,
+                    code: this.inputCode,
+                    password: this.password
+                });
                 if(res.data.code === 200){
-                    this.successNotif("Tu contraseña ha sido actualizado con éxito.")
+                    this.successNotif("Tu contraseña ha sido actualizado con éxito.");
+                    this.$router.replace({name: 'login'});
                 }
             } catch (error) {
                 this.warningNotif("Ha ocurrido un error inesperado.");
