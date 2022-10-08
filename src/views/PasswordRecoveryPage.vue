@@ -56,36 +56,52 @@ export default {
         },
         async requestPasswordRecovery() {
            try {
+                // Se valida que el correo sea válido.
+                this.showLoading(true);
                 const res = await axios.get(`/api/AdnUsuario/existsEmail/${this.email}`);
-
-                if(res.data.code === 200) {
-                    return swal({
-                        title: "Correo enviado",
-                        text: "Te hemos enviado un correo con tu código de seguridad. Por favor revisa tu bandeja de entrada o spam.",
-                        icon: "success",
-                        buttons: {
-                        cancel: {
-                            text: "Cerrar",
-                            value: false,
-                            visible: true,
-                            className: "swalCancelBtn"
-                        },
-                        confirm: {
-                            text: "Aceptar",
-                            value: true,
-                            className: "swalConfirmBtn"
-                        }
-                        },
-                        closeOnEsc: true
-                    }).then((value) => {
-                        if(value){
-                            this.$router.replace({name: 'passwordUpdate', params: {email: this.email}});
-                        }
-                    });
+                if(res.data.code === 200) { // sí es válido, se envía el correo.
+                    const sendEmail = await axios.get(`/api/AdnUsuario/VerificationCode/${this.email}`);
+                    if(sendEmail.data.code === 200){ // Sí el correo se envía.
+                        this.showLoading(false);
+                        const emailInfo = sendEmail.data.data;
+                        return swal({
+                            title: "Correo enviado",
+                            text: "Te hemos enviado un correo con tu código de seguridad. Por favor revisa tu bandeja de entrada o spam.",
+                            icon: "success",
+                            buttons: {
+                            cancel: {
+                                text: "Cerrar",
+                                value: false,
+                                visible: true,
+                                className: "swalCancelBtn"
+                            },
+                            confirm: {
+                                text: "Aceptar",
+                                value: true,
+                                className: "swalConfirmBtn"
+                            }
+                            },
+                            closeOnEsc: true
+                        }).then((value) => {
+                            if(value){
+                                this.showLoading(false);
+                                this.$router.replace({name: 'passwordUpdate', params: {
+                                    email: this.email
+                                    , code: emailInfo.codigo
+                                    , time: emailInfo.minutos
+                                }});
+                            }
+                        });
+                    } else {
+                        this.showLoading(false);
+                        this.errorNotif("Lo sentimos.", `El correo para recuperar tu contraseña no ha sido enviado, contacta a soporte técnico.`);
+                    }
                 } else {
+                    this.showLoading(false);
                     this.errorNotif("Lo sentimos.", `El correo ${this.email} que nos proporcionaste no coincide con ningun usuario.`);
                 }
-           } catch (error) {
+            } catch (error) {
+               this.showLoading(false);
                 this.warningNotif("Ha ocurrido un error inesperado.");
                 console.warn(error);
            }

@@ -101,6 +101,7 @@ const router = new Router({
           path: '/actualizar-contraseña',
           name: 'passwordUpdate',
           component: () => import('@/views/PasswordUpdatePage.vue'),
+          props: true,
           meta: {
             title: "Login",
             middleware: [un_auth]

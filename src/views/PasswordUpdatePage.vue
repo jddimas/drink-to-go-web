@@ -8,16 +8,17 @@
                     <h5 class="opacity-50">Escribe el código de que te llegó por correo, <br>el código caducará en 5 minutos.</h5>
                     <div class="mt-6 mb-4">
                         <vx-input-group class="w-full mb-4">
-                            <label for="email" class="bold">Escribe tu código</label>
+                            <label for="code" class="bold">Escribe tu código</label>
                             <vs-input
                                 name="code"
                                 type="text"
                                 icon-no-border
                                 v-validate="'required'"
-                                icon="icon icon-mail"
+                                icon="icon icon-hash"
                                 icon-pack="feather"
                                 label-placeholder=""
-                                v-model="code"
+                                autocomplete="null"
+                                v-model="inputCode"
                                 class="w-full mb-2"/>
 
                             <label for="password" class="bold">Nueva contraseña</label>
@@ -28,6 +29,7 @@
                                 icon="icon icon-lock"
                                 icon-pack="feather"
                                 label-placeholder=""
+                                autocomplete="null"
                                 v-model="password"
                                 class="w-full" />
 
@@ -39,13 +41,14 @@
                                 icon="icon icon-lock"
                                 icon-pack="feather"
                                 label-placeholder=""
+                                autocomplete="null"
                                 v-model="password_second"
                                 class="w-full" />
 
                         </vx-input-group>
                     </div>  
                     <div class="mt-4">
-                        <vs-button :disabled="isDisabled" @click.stop="login()" class="w-full">Restablecer</vs-button>
+                        <vs-button :disabled="isDisabled" @click.stop="requestUpdate()" class="w-full">Restablecer</vs-button>
                     </div>
                 </div>
             </section>
@@ -61,14 +64,14 @@ import * as moment from "moment";
 
 export default {
     name: 'password-update',
-    props: ["email"],
+    props: ["email", "code", "time"],
     data() {
         return {
             intervalFunc: null,
             secondRemainding: 0,
             password_second: null,
             password: null,
-            code: null
+            inputCode: null
         }
     },
     mounted() {
@@ -76,7 +79,7 @@ export default {
     },
     computed: {
         isDisabled(){
-            return this.password_second === null || this.password_second === "" || this.password === null || this.password === "" || this.code === null || this.code === "";
+            return this.password_second === null || this.password_second === "" || this.password === null || this.password === "" || this.inputCode === null || this.inputCode === "";
         }
     },
     methods: {
@@ -86,7 +89,7 @@ export default {
         countdown() {
             this.intervalFunc = setInterval(() => {
                 let now = moment();
-                let nextCloseSessionDate = moment(now).add(5, 'minutes');
+                let nextCloseSessionDate = moment(now).add(this.time, 'minutes');
 
                 let duration = moment.duration(nextCloseSessionDate.diff(now));
                 this.secondRemainding = duration.seconds() || 0;
@@ -95,11 +98,17 @@ export default {
 
         async requestUpdate() {
             try {
-                if(this.password !== this.password_second){
+                if(this.password != this.password_second){
                     this.warningNotif("Asegurate de que las contraseñas coincidan.");
+                    return;
+                }
+                
+                if(this.code != this.inputCode) {
+                    this.warningNotif("Asegurate de que el código coincida.");
+                    return;
                 }
 
-                const res = await axios.get(`/api/AdnUsuario/updatePasswordAdmin/${this.email}/${this.password}/${this.code}`);
+                const res = await axios.put(`/api/AdnUsuario/updatePasswordAdmin/${this.email}/${this.password}/${this.inputCode}`);
                 if(res.data.code === 200){
                     this.successNotif("Tu contraseña ha sido actualizado con éxito.")
                 }
