@@ -65,7 +65,7 @@ import store from '../../../../store/store.js'
 export default {
   data () {
     return {
-      imgURL: require("@/assets/images/logo/dg_logo.png"),
+      imgURL: require("@/assets/images/logo/new_logo_head.png"),
       loggedOut: false,
     }
   },

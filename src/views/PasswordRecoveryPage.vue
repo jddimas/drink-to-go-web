@@ -28,7 +28,8 @@
                 </div>
             </section>
             <section class="vx-col w-1/2 dg-dark flex no-gutter items-center justify-center">
-                <img src="@/assets/images/logo/logo_drink_go.png" alt="login">
+                <!-- <img src="@/assets/images/logo/logo_drink_go.png" alt="login"> -->
+                <img width="45%" src="@/assets/images/logo/new_logo_white.png" alt="login">
             </section>
         </div>
     </div>

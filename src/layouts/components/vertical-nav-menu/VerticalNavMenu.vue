@@ -30,9 +30,9 @@
         <div class="header-sidebar flex items-end justify-between" slot="header">
 
           <!-- Logo -->
-          <router-link tag="div" class="vx-logo cursor-pointer flex items-center" to="/">
-            <img class="w-10 mr-4 fill-current" :src="getSmallLogoUrl()" alt="Logo small"  />
-            <img :src="getLogoUrl" alt="Logo" width="70%" v-show="isMouseEnter || !reduce">
+          <router-link tag="div" class="vx-logo cursor-pointer flex items-center justify-center" to="/">
+            <!-- <img class="w-10 mr-4 fill-current" :src="getSmallLogoUrl()" alt="Logo small"  /> -->
+            <img class=" fill-current" :src="getLogoUrl" alt="Logo" width="80%" >
             <!-- <logo class="w-10 mr-4 fill-current text-primary" />
             <span class="vx-logo-text text-primary" v-show="isMouseEnter || !reduce" v-if="title">{{ title }}</span> -->
           </router-link>
@@ -119,8 +119,8 @@
 import VuePerfectScrollbar from 'vue-perfect-scrollbar'
 import VNavMenuGroup from './VerticalNavMenuGroup.vue'
 import VNavMenuItem from './VerticalNavMenuItem.vue'
-import isotipo from '@assets/images/logo/dg_logo.png';
-import logo from '@assets/images/logo/dg_letters.png';
+import isotipo from '@assets/images/logo/new_logo_head.png';
+import logo from '@assets/images/logo/new_bottle.png';
 
 import Logo from '../Logo.vue'
 
