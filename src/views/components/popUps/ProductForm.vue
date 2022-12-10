@@ -246,6 +246,11 @@ export default {
                 
                 const res = await axios.post(`/api/NegProductos/${action}`, payload);
                 if(res.data.code == 200){
+                    if(action == "updateProduct"){
+                        let formData = new FormData();
+                        formData.append("file", this.file);
+                        await axios.put(`/api/NegProductos/UpdateProductPhoto/${this.currentProduct.idProducto}`, data);
+                    }
                     this.saveSuccessNotif();
                     this.$emit('on-save');
                 } else {
