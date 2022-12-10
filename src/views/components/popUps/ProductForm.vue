@@ -249,7 +249,7 @@ export default {
                     if(action == "updateProduct"){
                         let formData = new FormData();
                         formData.append("file", this.file);
-                        await axios.put(`/api/NegProductos/UpdateProductPhoto/${this.currentProduct.idProducto}`, data);
+                        await axios.put(`/api/NegProductos/UpdateProductPhoto/${this.currentProduct.idProducto}`, formData);
                     }
                     this.saveSuccessNotif();
                     this.$emit('on-save');
