@@ -77,6 +77,7 @@
                 <div class="centerx ml-6">
                     <vs-upload 
                         ref="vsupload"
+                        id="productImage"
                         :show-upload-button="false" 
                         :multiple="false" 
                         limit="1"
@@ -141,7 +142,8 @@ export default {
                 precision: 2,
                 masked: false
             },
-            file: null
+            file: null,
+            filex: null
         }
     },
     mounted() {
@@ -162,6 +164,7 @@ export default {
                 , type:"image"
             }
             this.$refs.vsupload.srcs.push(objImg);
+            this.$refs.vsupload.filesx.push(this.currentProduct.imagenPequenia);
         },
         dataURLtoFile(dataurl, filename) {
             let arr = dataurl.split(','),
@@ -207,6 +210,13 @@ export default {
             } else {
                 this.file =  this.$refs.vsupload.srcs[0];
             }
+
+            if(this.$refs.vsupload.filesx.length > 1){
+                this.filex =  this.$refs.vsupload.filesx[this.$refs.vsupload.filesx.length - 1];
+            } else {
+                this.filex = this.$refs.vsupload.filesx[0];
+            }
+
             if(this.file == null || this.file == undefined){
                 this.missingFieldsNotif();
                 return;
@@ -246,11 +256,10 @@ export default {
                 
                 const res = await axios.post(`/api/NegProductos/${action}`, payload);
                 if(res.data.code == 200){
-                    if(action == "updateProduct"){
-                        let formData = new FormData();
-                        formData.append("file", this.file);
-                        await axios.put(`/api/NegProductos/UpdateProductPhoto/${this.currentProduct.idProducto}`, formData);
-                    }
+                    let idProduct = this.isEditing ? this.currentProduct.idProducto : res.data.data.idProducto;
+                    let formData = new FormData();
+                    formData.append("file", this.filex);
+                    await axios.put(`/api/NegProductos/UpdateProductPhoto/${idProduct}`, formData);
                     this.saveSuccessNotif();
                     this.$emit('on-save');
                 } else {
