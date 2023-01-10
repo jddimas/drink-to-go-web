@@ -154,17 +154,17 @@ export default {
     },
     methods: {
         setImage() {
-            this.$refs.vsupload.filesx.push(this.dataURLtoFile(this.currentProduct.imagenPequenia, this.currentProduct.nombre));
+            // this.$refs.vsupload.filesx.push(this.dataURLtoFile(this.currentProduct.imagenPequenia, this.currentProduct.nombre));
             const objImg = {
                 error:false
                 , orientation:"h"
                 , percent:null
                 , remove:null
-                , src: this.currentProduct.imagenPequenia
+                , src: 'https://'+this.currentProduct.imagenGrande
                 , type:"image"
             }
             this.$refs.vsupload.srcs.push(objImg);
-            this.$refs.vsupload.filesx.push(this.currentProduct.imagenPequenia);
+            this.$refs.vsupload.filesx.push('https://'+this.currentProduct.imagenGrande);
         },
         dataURLtoFile(dataurl, filename) {
             let arr = dataurl.split(','),

@@ -20,7 +20,7 @@
                         <template slot-scope="{data}">
                             <vs-tr :key="indextr" v-for="(tr, indextr) in data">
                                 <vs-td :data="data[indextr].imagenPequenia">
-                                    <img :src="tr.imagenPequenia" :alt="tr.name" width="60px" height="60px">
+                                    <img :src="'https://'+tr.imagenPequenia.trim()" :alt="tr.name" width="60px" height="60px">
                                 </vs-td>
                                 <vs-td :data="data[indextr].nombre">
                                     <strong> {{ tr.nombre }}</strong>
